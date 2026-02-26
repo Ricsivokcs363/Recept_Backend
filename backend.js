@@ -1,6 +1,7 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const path = require('path')
+const cors = require('cors')
 
 const userRoutes = require('./routes/userRoutes')
 const recipeRoutes = require('./routes/recipeRoutes')
@@ -16,7 +17,7 @@ backend.use(cors({
     origin:'http://localhost:5173',
     credentials: true 
 }))
-//fbfgfhfh
+
 backend.use('/users', userRoutes)
 backend.use('/recipe', recipeRoutes )
 backend.use('/fav', favRoutes)

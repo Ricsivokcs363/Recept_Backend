@@ -1,5 +1,20 @@
-const { getAllRecipes, createRecipe, deleteRecipe} = require('../models/recipeModel')
+const { getAllRecipes, createRecipe, deleteRecipe, findRecipe} = require('../models/recipeModel')
 
+async function searchRecipe(req, res) {
+    try {
+        const { search } = req.query 
+
+        if (!search) {
+            return res.status(400).json({ error: 'Hiányzó keresési kifejezés' })
+        }
+
+        const result = await findRecipe(search)
+        res.status(200).json(result)
+    } catch (err) {
+        console.error('KERESÉSI HIBA:', err)
+        res.status(500).json({ error: 'Recept lekérdezési hiba' })
+    }
+}
 async function listRecipes(req, res) {
     try {
         const recipes = await getAllRecipes()
@@ -53,4 +68,4 @@ async function removeRecipe(req, res) {
     }
 }
 
-module.exports = { listRecipes, addRecipe, removeRecipe }
+module.exports = { listRecipes, addRecipe, removeRecipe, searchRecipe }

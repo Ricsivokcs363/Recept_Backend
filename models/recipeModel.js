@@ -1,5 +1,16 @@
 const db = require('../db/db')
 
+
+async function findRecipe(search) {
+    const sql = `
+        SELECT recipes.*, users.username
+        FROM recipes
+        JOIN users ON users.user_id = recipes.user_id
+        WHERE recipes.title LIKE ?
+    `
+    const [rows] = await db.query(sql, [`%${search}%`])
+    return rows
+}
 async function getAllRecipes() {
     const sql = `
         SELECT recipes.*, users.username 
@@ -31,4 +42,4 @@ async function deleteRecipe(recipe_id, user_id) {
     return result.affectedRows
 }
 
-module.exports = { getAllRecipes, createRecipe, deleteRecipe }
+module.exports = { getAllRecipes, createRecipe, deleteRecipe,findRecipe }
