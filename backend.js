@@ -14,7 +14,7 @@ backend.use(cookieParser())
 
 backend.use(cors({
     origin:'http://localhost:5173',
-    credentials:'include'
+    credentials: true
 }))
 
 backend.use('/users', userRoutes)
