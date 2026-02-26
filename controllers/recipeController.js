@@ -11,7 +11,7 @@ async function searchRecipe(req, res) {
         const result = await findRecipe(search)
         res.status(200).json(result)
     } catch (err) {
-        console.error('KERESÉSI HIBA:', err)
+        //console.error('KERESÉSI HIBA:', err)
         res.status(500).json({ error: 'Recept lekérdezési hiba' })
     }
 }
