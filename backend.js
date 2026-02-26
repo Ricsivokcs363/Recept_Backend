@@ -12,6 +12,11 @@ const backend = express()
 backend.use(express.json())
 backend.use(cookieParser())
 
+backend.use(cors({
+    origin:'http://localhost:5173',
+    credentials: true 
+}))
+
 backend.use('/users', userRoutes)
 backend.use('/recipe', recipeRoutes )
 backend.use('/fav', favRoutes)
