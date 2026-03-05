@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const { findByEmail, createUser } = require("../models/userModels")
+const { findByEmail, createUser , deleteUser,editUser} = require("../models/userModels")
 const { config } = require('../config/dotenvConfig')
 const jwt = require('jsonwebtoken')
 
@@ -17,6 +17,7 @@ async function register(req, res) {
         if (!username || !email || !password) {
             return res.status(400).json({ error: 'Minden mezőt ki kell tölteni!' })
         }
+        
 
         const exist = await findByEmail(email)
         console.log(exist)
@@ -89,4 +90,46 @@ async function logout(req, res) {
 }
 
 
-module.exports = { register, login, whoAmI, logout}
+async function deleteUsers(req, res) {
+    try {
+        const { user_id } = req.params
+
+        const torles = await deleteUser(user_id)
+
+        if (torles === 0) {
+            return res.status(404).json({ message: "Felhasználó nem található" })
+        }
+
+        res.status(200).json({ message: "Felhasználó törölve" })
+
+    } catch (err) {
+        res.status(500).json({ error: "Törlési hiba" })
+    }
+}
+
+async function updateUser(req, res) {
+    try {
+        const { username, email, password } = req.body
+        const { user_id } = req.user   // JWT-ből
+
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'Minden mező kötelező' })
+        }
+
+        const hash = await bcrypt.hash(password, 10)
+
+        const result = await editUser(user_id, username, email, hash)
+
+        return res.status(200).json({
+            message: 'Felhasználó frissítve',
+            affectedRows: result.affectedRows
+        })
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Felhasználó módosítás hiba' })
+    }
+}
+
+
+module.exports = { register, login, whoAmI, logout, deleteUsers,updateUser}

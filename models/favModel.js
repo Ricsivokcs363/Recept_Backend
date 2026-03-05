@@ -15,4 +15,13 @@ async function getFavs(user_id) {
     return rows
 }
 
-module.exports = { addFav, getFavs }
+async function deleteFav(user_id, recipe_id) {
+    const sql = 'DELETE FROM fav WHERE user_id = ? AND recipe_id = ?'
+
+    const [result] = await db.query(sql, [user_id, recipe_id])
+
+    return { affectedRows: result.affectedRows }
+}
+
+
+module.exports = { addFav, getFavs, deleteFav }
