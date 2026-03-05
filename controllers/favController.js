@@ -1,4 +1,4 @@
-const { addFav, getFavs } = require('../models/favModel')
+const { addFav, getFavs, deleteFav } = require('../models/favModel')
 
 async function addToFav(req, res) {
     try {
@@ -18,4 +18,23 @@ async function listFavs(req, res) {
     }
 }
 
-module.exports = { addToFav, listFavs }
+async function removeFav(req, res) {
+    try {
+        const { recipe_id } = req.params
+        const { user_id } = req.user
+
+        const result = await deleteFav(user_id, recipe_id)
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Nincs ilyen kedvenc" })
+        }
+
+        res.status(200).json({ message: "Kedvenc törölve" })
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: "Fav törlési hiba" })
+    }
+}
+
+module.exports = { addToFav, listFavs, removeFav}
