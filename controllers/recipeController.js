@@ -68,4 +68,20 @@ async function removeRecipe(req, res) {
     }
 }
 
-module.exports = { listRecipes, addRecipe, removeRecipe, searchRecipe }
+const { getMyRecipes } = require('../models/recipeModel')
+
+async function myRecipes(req, res) {
+    try {
+        const { user_id } = req.user   // 🔥 JWT-ből jön
+
+        const recipes = await getMyRecipes(user_id)
+
+        res.status(200).json(recipes)
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: 'Saját receptek lekérdezési hiba' })
+    }
+}
+
+module.exports = { listRecipes, addRecipe, removeRecipe, searchRecipe, myRecipes }
