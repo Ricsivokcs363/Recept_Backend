@@ -21,7 +21,7 @@ backend.use(cors({
 backend.use('/users', userRoutes)
 backend.use('/recipe', recipeRoutes )
 backend.use('/fav', favRoutes)
-backend.use('/uploads', express.static(path.join(process.cwd(), 'uploads')))
+backend.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 
 module.exports = backend
