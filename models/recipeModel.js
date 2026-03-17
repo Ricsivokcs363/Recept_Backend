@@ -42,4 +42,17 @@ async function deleteRecipe(recipe_id, user_id) {
     return result.affectedRows
 }
 
-module.exports = { getAllRecipes, createRecipe, deleteRecipe,findRecipe }
+async function getMyRecipes(user_id) {
+    const sql = `
+        SELECT * FROM recipes
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+    `
+
+    const [rows] = await db.query(sql, [user_id])
+
+    return rows
+}
+
+
+module.exports = { getAllRecipes, createRecipe, deleteRecipe,findRecipe,getMyRecipes }
