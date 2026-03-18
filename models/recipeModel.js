@@ -44,9 +44,7 @@ async function deleteRecipe(recipe_id, user_id) {
 
 async function getMyRecipes(user_id) {
     const sql = `
-        SELECT * FROM recipes
-        WHERE user_id = ?
-        ORDER BY created_at DESC
+        SELECT * FROM recipes WHERE user_id = 1 ORDER BY RAND();
     `
 
     const [rows] = await db.query(sql, [user_id])
