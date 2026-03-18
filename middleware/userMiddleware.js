@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const {config} = require('../config/dotenvConfig')
 
 function auth(req, res, next) {
-    //console.log(req)
+    //console.log(req.headers)
     const token = req.cookies?.[config.COOKIE_NAME]
     //console.log(token)
     if (!token) {
