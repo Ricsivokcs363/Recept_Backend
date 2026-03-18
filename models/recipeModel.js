@@ -16,7 +16,7 @@ async function getAllRecipes() {
         SELECT recipes.*, users.username 
         FROM recipes 
         JOIN users ON users.user_id = recipes.user_id
-        ORDER BY created_at DESC
+        ORDER BY RAND();
     `
     const [rows] = await db.query(sql)
     return rows
