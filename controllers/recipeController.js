@@ -1,4 +1,4 @@
-const { getAllRecipes, createRecipe, deleteRecipe, findRecipe} = require('../models/recipeModel')
+const { getAllRecipes, createRecipe, deleteRecipe, findRecipe,getAllRecipesLogIn} = require('../models/recipeModel')
 
 async function searchRecipe(req, res) {
     try {
@@ -20,7 +20,18 @@ async function listRecipes(req, res) {
         const recipes = await getAllRecipes()
         res.status(200).json(recipes)
     } catch (err) {
+        console.log(err);
         res.status(500).json({ error: 'Recept lekérdezési hiba' })
+    }
+}
+
+async function listRecipesLogged(req, res) {
+    try {
+        const { user_id } = req.user
+        const recipes = await getAllRecipesLogIn(user_id)
+        res.json(recipes)
+    } catch (err) {
+        res.status(500).json({ error: 'Lekérdezési hiba' })
     }
 }
 
@@ -84,4 +95,4 @@ async function myRecipes(req, res) {
     }
 }
 
-module.exports = { listRecipes, addRecipe, removeRecipe, searchRecipe, myRecipes }
+module.exports = { listRecipes, addRecipe, removeRecipe, searchRecipe, myRecipes,listRecipesLogged }
