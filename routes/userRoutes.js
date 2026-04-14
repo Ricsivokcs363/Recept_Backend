@@ -1,7 +1,7 @@
 const express = require('express')
 const {register, login, whoAmI, logout, deleteUsers, updateUser} = require('../controllers/userContoller')
 const {auth} = require('../middleware/userMiddleware')
-
+const {isAdmin} = require('../middleware/isAdminMiddleware')
 
 const router = express.Router()
 
@@ -11,5 +11,7 @@ router.get('/whoami', auth, whoAmI)
 router.post('/logout', auth, logout)
 router.delete('/delete/:user_id', auth, deleteUsers)
 router.put('/edit', auth, updateUser)
+router.put('/admin/edit/:user_id', auth, isAdmin, updateUser)
+
 
 module.exports = router
