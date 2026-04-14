@@ -1,5 +1,5 @@
 const express = require('express')
-const { addToFav, listFavs, removeFav} = require('../controllers/favController')
+const { addToFav, listFavs, removeFav } = require('../controllers/favController')
 const { auth } = require('../middleware/userMiddleware')
 
 const router = express.Router()

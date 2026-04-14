@@ -1,27 +1,29 @@
-const { getAllRecipes, createRecipe, deleteRecipe, findRecipe,getAllRecipesLogIn} = require('../models/recipeModel')
+const {
+    getAllRecipes,createRecipe,deleteRecipe,findRecipe, getAllRecipesLogIn,getMyRecipes} = require('../models/recipeModel')
 
 async function searchRecipe(req, res) {
     try {
-        const { search } = req.query 
+        const { search } = req.query
 
         if (!search) {
             return res.status(400).json({ error: 'Hiányzó keresési kifejezés' })
         }
 
         const result = await findRecipe(search)
-        res.status(200).json(result)
+        return res.status(200).json(result)
     } catch (err) {
-        //console.error('KERESÉSI HIBA:', err)
-        res.status(500).json({ error: 'Recept lekérdezési hiba' })
+        console.log(err)
+        return res.status(500).json({ error: 'Recept lekérdezési hiba' })
     }
 }
+
 async function listRecipes(req, res) {
     try {
         const recipes = await getAllRecipes()
-        res.status(200).json(recipes)
+        return res.status(200).json(recipes)
     } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: 'Recept lekérdezési hiba' })
+        console.log(err)
+        return res.status(500).json({ error: 'Recept lekérdezési hiba' })
     }
 }
 
@@ -29,9 +31,10 @@ async function listRecipesLogged(req, res) {
     try {
         const { user_id } = req.user
         const recipes = await getAllRecipesLogIn(user_id)
-        res.json(recipes)
+        return res.status(200).json(recipes)
     } catch (err) {
-        res.status(500).json({ error: 'Lekérdezési hiba' })
+        console.log(err)
+        return res.status(500).json({ error: 'Lekérdezési hiba' })
     }
 }
 
@@ -55,44 +58,45 @@ async function addRecipe(req, res) {
             req.user.user_id
         )
 
-        res.status(201).json({ message: 'Recept létrehozva' })
+        return res.status(201).json({ message: 'Recept létrehozva' })
     } catch (err) {
         console.error(err)
-        res.status(500).json({ error: 'Recept feltöltési hiba' })
+        return res.status(500).json({ error: 'Recept feltöltési hiba' })
     }
 }
 
 async function removeRecipe(req, res) {
     try {
-        const affected = await deleteRecipe(
-            req.params.id,
-            req.user.user_id
-        )
+        const affected = await deleteRecipe(req.params.id, req.user.user_id)
 
         if (affected === 0) {
             return res.status(403).json({ error: 'Nincs jogosultság' })
         }
 
-        res.status(200).json({ message: 'Recept törölve' })
+        return res.status(200).json({ message: 'Recept törölve' })
     } catch (err) {
-        res.status(500).json({ error: 'Recept törlési hiba' })
+        console.log(err)
+        return res.status(500).json({ error: 'Recept törlési hiba' })
     }
 }
-
-const { getMyRecipes } = require('../models/recipeModel')
 
 async function myRecipes(req, res) {
     try {
-        const { user_id } = req.user   // 🔥 JWT-ből jön
-
+        const { user_id } = req.user
         const recipes = await getMyRecipes(user_id)
 
-        res.status(200).json(recipes)
-
+        return res.status(200).json(recipes)
     } catch (err) {
         console.log(err)
-        res.status(500).json({ error: 'Saját receptek lekérdezési hiba' })
+        return res.status(500).json({ error: 'Saját receptek lekérdezési hiba' })
     }
 }
 
-module.exports = { listRecipes, addRecipe, removeRecipe, searchRecipe, myRecipes,listRecipesLogged }
+module.exports = {
+    listRecipes,
+    addRecipe,
+    removeRecipe,
+    searchRecipe,
+    myRecipes,
+    listRecipesLogged
+}
