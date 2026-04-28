@@ -9,7 +9,7 @@ function isAdmin(req, res, next) {
         if (normalizedRole !== 'admin' && normalizedRole !== '1') {
             return res.status(403).json({ error: 'Nincs jogosultságod a művelethez' })
         }
-
+        console.log(`normalizedRole: ${normalizedRole}`);
         next()
     } catch (err) {
         return res.status(500).json({ error: 'Szerver hiba az admin figyelésnél' })
